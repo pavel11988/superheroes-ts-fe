@@ -1,6 +1,3 @@
-// libs
-import PropTypes from "prop-types";
-
 // config
 import { BASE_URL, IMAGES } from "../../config";
 import Icon from "../Icon/Icon";
@@ -29,8 +26,6 @@ const ImageModal = ({
     setImageToImageModal(null);
   };
 
-  console.log(imageToImageModal);
-
   return (
     <ModalContainer>
       <Button type="submit" onClick={handleClose}>
@@ -45,10 +40,5 @@ const ImageModal = ({
   );
 };
 
-ImageModal.propTypes = {
-  setImageToImageModal: PropTypes.func.isRequired,
-  imageToImageModal: PropTypes.object.isRequired,
-  setViewImageModal: PropTypes.func.isRequired,
-};
 
 export default ImageModal;

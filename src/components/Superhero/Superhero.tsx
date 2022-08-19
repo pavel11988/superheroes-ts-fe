@@ -10,13 +10,21 @@ import Controllers from "./Controllers/Controllers";
 
 //styled components
 import { Card, Nickname, RealName } from "./Superhero.styled";
+import ISuperheroDB from "../../interfaces/superherodb.interface";
+
+interface IProps {
+  superhero: ISuperheroDB;
+  setViewEditForm: Function;
+  setViewImageModal: Function;
+  setImageToImageModal: Function;
+}
 
 const Superhero = ({
   superhero,
   setViewEditForm,
   setViewImageModal,
   setImageToImageModal,
-}) => {
+}: IProps) => {
   const { nickname, real_name } = superhero;
   return (
     <Card>
