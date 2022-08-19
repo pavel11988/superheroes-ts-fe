@@ -3,7 +3,7 @@ import Modal from "react-modal";
 import { Toaster } from "react-hot-toast";
 
 // hooks:
-import { useState } from "react";
+import { SetStateAction, useState } from "react";
 import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 
@@ -24,6 +24,7 @@ import ImageModal from "../ImageModal/ImageModal";
 
 // interface
 import IState from '../../interfaces/state.interface';
+import IImage from "../../interfaces/image.interface";
 
 const modalStyles = {
   content: {
@@ -44,14 +45,13 @@ const modalStyles = {
 
 Modal.setAppElement("#root");
 
-
 const App:React.FC = () => {
   const dispatch = useDispatch<AppDispatch>();
 
-  const [viewAddForm, setViewAddForm] = useState(false);
-  const [viewEditForm, setViewEditForm] = useState(false);
-  const [viewImageModal, setViewImageModal] = useState(false);
-  const [imageToImageModal, setImageToImageModal] = useState<{} | null>(null);
+  const [viewAddForm, setViewAddForm] = useState<SetStateAction<boolean | null>>(false);
+  const [viewEditForm, setViewEditForm] = useState<SetStateAction<boolean | null>>(false);
+  const [viewImageModal, setViewImageModal] = useState<SetStateAction<boolean | null>>(false);
+  const [imageToImageModal, setImageToImageModal] = useState<IImage | null>(null);
 
   const totalPages = useSelector((state: IState) => state.superheroes.totalPages);
   const page = useSelector((state: IState) => state.superheroes.page);
