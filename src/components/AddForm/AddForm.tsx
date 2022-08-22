@@ -1,87 +1,82 @@
 // import libs
-import { useForm } from "react-hook-form";
 import { useDispatch, useSelector } from "react-redux";
+import { useForm } from "react-hook-form";
 
 // redux
 import superheroesOperations from "../../redux/superheroes/superheroOperations";
-
-// components
-import Loader from "../Loader/Loader";
-import { ReactComponent as CloseIcon } from "../../images/cross.svg";
+// import { FuncDispatch } from "../../redux/store";
 
 // styled components
 import {
+  ButtonAdd,
   ButtonClose,
-  ButtonUpdate,
-  EditorContainer,
   ErrorMessage,
   Field,
   FieldContainer,
   Form,
+  FormContainer,
   Label,
   Title,
-} from "./EditForm.styled";
-import { toggleModalEditOpen } from "../../redux/global/globalSlice";
+} from "./AddForm.styled";
 
-const EditForm = () => {
-  const dispatch = useDispatch();
-  const currentSuperhero = useSelector(
-    (state) => state.superheroes.currentSuperhero
-  );
-  const currentPage = useSelector((state) => state.superheroes.page);
-  const currentLimit = useSelector((state) => state.superheroes.limit);
+// components
+import Loader from "../Loader/Loader";
+import { toggleModalAddOpen } from "../../redux/global/globalSlice";
+import Icon from "../Icon/Icon";
+import { AppDispatch } from "../../redux/store";
+import IState from "../../interfaces/state.interface";
+import IAddSuperhero from "../../interfaces/addSuperhero.interface";
 
-  const { nickname, real_name, origin_description, superpowers, catch_phrase } =
-    currentSuperhero;
+type FormValues = {
+  nickname: string;
+  realName: string;
+  originDescription: string;
+  superpowers: string;
+  catchPhrase: string;
+};
+
+const AddForm = () => {
+  const dispatch = useDispatch<AppDispatch>();
 
   const {
     register,
     formState: { errors, isValid },
     handleSubmit,
-  } = useForm({
+  } = useForm<FormValues>({
     mode: "onChange",
   });
 
-  const onSubmit = async (data) => {
+  const onSubmit = async (data: FormValues) => {
     const { nickname, realName, originDescription, superpowers, catchPhrase } =
       data;
-    const updatedSuperhero = {
+    const superhero: IAddSuperhero = {
       nickname,
       real_name: realName,
       origin_description: originDescription,
       superpowers: superpowers,
       catch_phrase: catchPhrase,
     };
-    const superheroId = currentSuperhero._id;
 
-    await dispatch(
-      superheroesOperations.updateSuperhero({ superheroId, updatedSuperhero })
-    );
-
-    await dispatch(
-      superheroesOperations.listSuperheroes(currentPage, currentLimit)
-    );
-
-    await dispatch(toggleModalEditOpen(false));
+    await dispatch(superheroesOperations.addSuperhero(superhero)); // add new super hero
+    await dispatch(superheroesOperations.listSuperheroes({})); // refresh list hero
+    await dispatch(toggleModalAddOpen(false));
   };
 
-  const status = useSelector((state) => state.superheroes.status);
+  const status = useSelector((state: IState) => state.superheroes.status);
   const PENDING = status === "pending";
   const RESOLVED = status === "resolved";
 
   return (
-    <EditorContainer>
+    <FormContainer>
       <ButtonClose
         type="button"
         onClick={() => {
-          dispatch(toggleModalEditOpen(false));
+          dispatch(toggleModalAddOpen(false));
         }}
       >
-        {<CloseIcon fill={"#ffffff"} />}
+        <Icon id={"#icon-cross"} width={20} height={20} color={"#f9f9f9"} />
       </ButtonClose>
-
-      <Title>Change Superhero</Title>
-
+      <Title>Add new Superhero</Title>
       <Form onSubmit={handleSubmit(onSubmit)}>
         <FieldContainer>
           <Label>
@@ -97,7 +92,6 @@ const EditForm = () => {
                   value: 15,
                   message: "Maximum length 15 characters",
                 },
-                value: nickname,
               })}
             />
           </Label>
@@ -120,7 +114,6 @@ const EditForm = () => {
                   value: 15,
                   message: "Maximum length 15 characters",
                 },
-                value: real_name,
               })}
             />
           </Label>
@@ -143,7 +136,6 @@ const EditForm = () => {
                   value: 50,
                   message: "Maximum length 50 characters",
                 },
-                value: origin_description,
               })}
             />
           </Label>
@@ -167,7 +159,6 @@ const EditForm = () => {
                   value: 25,
                   message: "Maximum length 25 characters",
                 },
-                value: superpowers,
               })}
             />
           </Label>
@@ -192,7 +183,6 @@ const EditForm = () => {
                   value: 15,
                   message: "Maximum length 15 characters",
                 },
-                value: catch_phrase,
               })}
             />
           </Label>
@@ -202,15 +192,14 @@ const EditForm = () => {
             )}
           </ErrorMessage>
         </FieldContainer>
-        <div>
-          {PENDING && <Loader color={"white"} />}
-          {RESOLVED && (
-            <ButtonUpdate type="submit" value="Update" disabled={!isValid} />
-          )}
-        </div>
+
+        {PENDING && <Loader color="white" />}
+        {RESOLVED && (
+          <ButtonAdd type="submit" value="Add" disabled={!isValid} />
+        )}
       </Form>
-    </EditorContainer>
+    </FormContainer>
   );
 };
 
-export default EditForm;
+export default AddForm;

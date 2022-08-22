@@ -18,7 +18,7 @@ const SuperheroList = () => {
   return (
     <List>
       {superheroes.map((superhero) => (
-        <Superhero key={superhero.id} superhero={superhero} />
+        <Superhero key={superhero._id} superhero={superhero} />
       ))}
     </List>
   );

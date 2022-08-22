@@ -2,7 +2,7 @@ import axios from "axios";
 import { createAsyncThunk } from "@reduxjs/toolkit";
 import { BASE_URL, API_SUPERHEROES } from "../../config";
 import toast from "react-hot-toast";
-import ISuperheroDB from "../../interfaces/superherodb.interface";
+import IAddSuperhero from "../../interfaces/addSuperhero.interface";
 const notifySuccess = (message: string) => toast.success(message);
 const notifyError = (message: string) => toast.error(message);
 
@@ -27,7 +27,7 @@ const listSuperheroes = createAsyncThunk(
 
 const addSuperhero = createAsyncThunk(
   "superheroes/addSuperhero",
-  async (newSupehero: ISuperheroDB) => {
+  async (newSupehero: IAddSuperhero) => {
     try {
       await axios.post(`${BASE_URL}/${API_SUPERHEROES}`, newSupehero);
       notifySuccess("Superhero is created");
@@ -67,7 +67,7 @@ const getSuperheroById = createAsyncThunk(
 );
 
 
-type UpdateSuperheroData = {superheroId: string, updatedSuperhero: ISuperheroDB}
+type UpdateSuperheroData = {superheroId: string, updatedSuperhero: IAddSuperhero}
 
 const updateSuperhero = createAsyncThunk(
   "superheroes/changeSuperhero",

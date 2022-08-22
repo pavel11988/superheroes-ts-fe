@@ -12,5 +12,5 @@ export default interface ISuperheroDB {
     real_name: string;
     superpowers: string;
     updatedAt: string;
-    id: string;
+    _id: string;
 }
