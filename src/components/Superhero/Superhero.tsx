@@ -1,6 +1,3 @@
-// libs
-import PropTypes from "prop-types";
-
 // components
 import Characteristic from "./Characteristic/Characteristic";
 import Avatar from "./Avatar/Avatar";
@@ -14,17 +11,9 @@ import ISuperheroDB from "../../interfaces/superherodb.interface";
 
 interface IProps {
   superhero: ISuperheroDB;
-  setViewEditForm: Function;
-  setViewImageModal: Function;
-  setImageToImageModal: Function;
 }
 
-const Superhero = ({
-  superhero,
-  setViewEditForm,
-  setViewImageModal,
-  setImageToImageModal,
-}: IProps) => {
+const Superhero = ({ superhero }: IProps) => {
   const { nickname, real_name } = superhero;
   return (
     <Card>
@@ -32,28 +21,11 @@ const Superhero = ({
       <Nickname>{nickname}</Nickname>
       <RealName>{real_name}</RealName>
       <Characteristic superhero={superhero} />
-      <Gallery
-        superhero={superhero}
-        setViewImageModal={setViewImageModal}
-        setImageToImageModal={setImageToImageModal}
-      />
+      <Gallery superhero={superhero} />
       <Uploader superhero={superhero} />
-      <Controllers superhero={superhero} setViewEditForm={setViewEditForm} />
+      <Controllers superhero={superhero} />
     </Card>
   );
-};
-
-Superhero.propTypes = {
-  superhero: PropTypes.shape({
-    nickname: PropTypes.string.isRequired,
-    real_name: PropTypes.string.isRequired,
-    origin_description: PropTypes.string.isRequired,
-    superpowers: PropTypes.string.isRequired,
-    catch_phrase: PropTypes.string.isRequired,
-  }),
-  setViewEditForm: PropTypes.func.isRequired,
-  setViewImageModal: PropTypes.func.isRequired,
-  setImageToImageModal: PropTypes.func.isRequired,
 };
 
 export default Superhero;

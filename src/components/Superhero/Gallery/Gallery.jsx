@@ -1,12 +1,13 @@
-// libs
-import PropTypes from "prop-types";
-
 // config
 import { BASE_URL, IMAGES } from "../../../config";
 
 // redux
 import { useDispatch, useSelector } from "react-redux";
 import superheroesOperations from "../../../redux/superheroes/superheroOperations";
+import {
+  setImage,
+  toggleModalImageOpen,
+} from "../../../redux/global/globalSlice";
 
 // components
 import { ReactComponent as DeleteIcon } from "../../../images/delete.svg";
@@ -22,16 +23,16 @@ import {
   ImageButton,
 } from "./Gallery.styled";
 
-const Gallery = ({ superhero, setImageToImageModal, setViewImageModal }) => {
+const Gallery = ({ superhero }) => {
   const dispacth = useDispatch();
   const currentPage = useSelector((state) => state.superheroes.page);
   const currentLimit = useSelector((state) => state.superheroes.limit);
 
   const { images } = superhero;
 
-  const openImage = (image) => {
-    setImageToImageModal(image);
-    setViewImageModal(true);
+  const openImage = async (image) => {
+    await dispacth(setImage(image));
+    await dispacth(toggleModalImageOpen(true));
   };
 
   const deleteImage = async (data) => {
@@ -85,18 +86,6 @@ const Gallery = ({ superhero, setImageToImageModal, setViewImageModal }) => {
       )}
     </GalleryContainer>
   );
-};
-
-Gallery.propTypes = {
-  superhero: PropTypes.shape({
-    nickname: PropTypes.string.isRequired,
-    real_name: PropTypes.string.isRequired,
-    origin_description: PropTypes.string.isRequired,
-    superpowers: PropTypes.string.isRequired,
-    catch_phrase: PropTypes.string.isRequired,
-  }),
-  setImageToImageModal: PropTypes.func.isRequired,
-  setViewImageModal: PropTypes.func.isRequired,
 };
 
 export default Gallery;

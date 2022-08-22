@@ -1,4 +1,4 @@
-type Image = {
+interface Image {
     extension: string;
     id: string;
 }
@@ -12,5 +12,5 @@ export default interface ISuperheroDB {
     real_name: string;
     superpowers: string;
     updatedAt: string;
-    _id: string;
+    id: string;
 }

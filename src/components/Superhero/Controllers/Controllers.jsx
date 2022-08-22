@@ -1,9 +1,6 @@
 // import libs
 import { useState } from "react";
 
-// libs
-import PropTypes, { func } from "prop-types";
-
 // redux
 import { useDispatch, useSelector } from "react-redux";
 
@@ -20,9 +17,11 @@ import {
   ButtonsContainer,
   ButtonWrapper,
 } from "./Controllers.styled";
+import { toggleModalEditOpen } from "../../../redux/global/globalSlice";
 
-const Controllers = ({ superhero, setViewEditForm }) => {
+const Controllers = ({ superhero }) => {
   const dispatch = useDispatch();
+
   const status = useSelector((state) => state.superheroes.status);
   const currentPage = useSelector((state) => state.superheroes.page);
   const currentLimit = useSelector((state) => state.superheroes.limit);
@@ -51,7 +50,7 @@ const Controllers = ({ superhero, setViewEditForm }) => {
     event.preventDefault();
     setLoadingEdit(true);
     await dispatch(superheroesOperations.getSuperheroById(superhero._id));
-    setViewEditForm(true);
+    dispatch(toggleModalEditOpen(true));
     setLoadingEdit(false);
   };
 
@@ -81,17 +80,6 @@ const Controllers = ({ superhero, setViewEditForm }) => {
       </ButtonWrapper>
     </ButtonsContainer>
   );
-};
-
-Controllers.propTypes = {
-  superhero: PropTypes.shape({
-    nickname: PropTypes.string.isRequired,
-    real_name: PropTypes.string.isRequired,
-    origin_description: PropTypes.string.isRequired,
-    superpowers: PropTypes.string.isRequired,
-    catch_phrase: PropTypes.string.isRequired,
-  }),
-  setViewEditForm: func.isRequired,
 };
 
 export default Controllers;

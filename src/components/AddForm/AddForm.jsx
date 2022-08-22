@@ -1,7 +1,6 @@
 // import libs
 import { useDispatch, useSelector } from "react-redux";
 import { useForm } from "react-hook-form";
-import PropTypes from "prop-types";
 
 // redux
 import superheroesOperations from "../../redux/superheroes/superheroOperations";
@@ -23,6 +22,7 @@ import {
 // components
 import { ReactComponent as CloseIcon } from "../../images/cross.svg";
 import Loader from "../Loader/Loader";
+import { toggleModalAddOpen } from "../../redux/global/globalSlice";
 
 // // interfaces
 // interface IProps {
@@ -45,7 +45,7 @@ import Loader from "../Loader/Loader";
 //   catch_phrase: string,
 // }
 
-const AddForm = ({ setViewAddForm }) => {
+const AddForm = () => {
   const dispatch = useDispatch();
 
   const {
@@ -69,7 +69,7 @@ const AddForm = ({ setViewAddForm }) => {
 
     await dispatch(superheroesOperations.addSuperhero(superhero)); // add new super hero
     await dispatch(superheroesOperations.listSuperheroes({})); // refresh list hero
-    setViewAddForm("Superhero created");
+    await dispatch(toggleModalAddOpen(false));
   };
 
   const status = useSelector((state) => state.superheroes.status);
@@ -81,7 +81,7 @@ const AddForm = ({ setViewAddForm }) => {
       <ButtonClose
         type="button"
         onClick={() => {
-          setViewAddForm(false);
+          dispatch(toggleModalAddOpen(false));
         }}
       >
         {<CloseIcon fill={"#ffffff"} />}
@@ -210,10 +210,6 @@ const AddForm = ({ setViewAddForm }) => {
       </Form>
     </FormContainer>
   );
-};
-
-AddForm.propTypes = {
-  setViewAddForm: PropTypes.func.isRequired,
 };
 
 export default AddForm;

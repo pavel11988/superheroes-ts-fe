@@ -2,28 +2,19 @@
 import { BASE_URL, IMAGES } from "../../config";
 import Icon from "../Icon/Icon";
 
-// interfaces 
-import IImage from "../../interfaces/image.interface";
-
 // styled components
 import { Button, ModalContainer } from "./ImageModal.styled";
+import { useDispatch, useSelector } from "react-redux";
+import globalSelectors from "../../redux/global/globalSelectors";
+import { setImage, toggleModalImageOpen } from "../../redux/global/globalSlice";
 
-// type setFunc = (value: boolean | null) => void;
+const ImageModal = () => {
+  const dispatch = useDispatch();
+  const imageToImageModal = useSelector(globalSelectors.getImage);
 
-interface IProps {
-  setImageToImageModal: Function;
-  setViewImageModal: Function;
-  imageToImageModal: IImage | null;
-}
-
-const ImageModal = ({
-  setImageToImageModal,
-  imageToImageModal,
-  setViewImageModal,
-}: IProps) => {
-  const handleClose = () => {
-    setViewImageModal(false);
-    setImageToImageModal(null);
+  const handleClose = async () => {
+    await dispatch(toggleModalImageOpen(false));
+    await dispatch(setImage(null));
   };
 
   return (
@@ -39,6 +30,5 @@ const ImageModal = ({
     </ModalContainer>
   );
 };
-
 
 export default ImageModal;

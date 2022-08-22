@@ -1,7 +1,6 @@
 // import libs
 import { useForm } from "react-hook-form";
 import { useDispatch, useSelector } from "react-redux";
-import PropTypes from "prop-types";
 
 // redux
 import superheroesOperations from "../../redux/superheroes/superheroOperations";
@@ -22,8 +21,9 @@ import {
   Label,
   Title,
 } from "./EditForm.styled";
+import { toggleModalEditOpen } from "../../redux/global/globalSlice";
 
-const EditForm = ({ setViewEditor }) => {
+const EditForm = () => {
   const dispatch = useDispatch();
   const currentSuperhero = useSelector(
     (state) => state.superheroes.currentSuperhero
@@ -62,7 +62,7 @@ const EditForm = ({ setViewEditor }) => {
       superheroesOperations.listSuperheroes(currentPage, currentLimit)
     );
 
-    setViewEditor(false);
+    await dispatch(toggleModalEditOpen(false));
   };
 
   const status = useSelector((state) => state.superheroes.status);
@@ -74,7 +74,7 @@ const EditForm = ({ setViewEditor }) => {
       <ButtonClose
         type="button"
         onClick={() => {
-          setViewEditor(false);
+          dispatch(toggleModalEditOpen(false));
         }}
       >
         {<CloseIcon fill={"#ffffff"} />}
@@ -211,10 +211,6 @@ const EditForm = ({ setViewEditor }) => {
       </Form>
     </EditorContainer>
   );
-};
-
-EditForm.propTypes = {
-  setViewEditor: PropTypes.func.isRequired,
 };
 
 export default EditForm;

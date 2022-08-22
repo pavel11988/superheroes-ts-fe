@@ -1,8 +1,8 @@
-import ISuperhero from './superhero.interface';
+import ISuperheroDB from './superherodb.interface';
 
 export default interface ISuperheroesState {
-    superheroes: ISuperhero[];
-    currentSuperhero: ISuperhero;
+    superheroes: ISuperheroDB[];
+    currentSuperhero: ISuperheroDB;
     totalPages: number;
     page: number;
     limit: number;
