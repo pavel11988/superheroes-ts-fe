@@ -3,10 +3,11 @@ import { createAsyncThunk } from "@reduxjs/toolkit";
 import { BASE_URL, API_SUPERHEROES } from "../../config";
 import toast from "react-hot-toast";
 import IAddSuperhero from "../../interfaces/addSuperhero.interface";
+import IImage from "../../interfaces/image.interface";
 const notifySuccess = (message: string) => toast.success(message);
 const notifyError = (message: string) => toast.error(message);
 
-type ListData = {page?: number, limit?: number};
+type ListData = { page?: number; limit?: number };
 
 const listSuperheroes = createAsyncThunk(
   "superheroes/listSuperheroes",
@@ -23,7 +24,6 @@ const listSuperheroes = createAsyncThunk(
     }
   }
 );
-
 
 const addSuperhero = createAsyncThunk(
   "superheroes/addSuperhero",
@@ -66,8 +66,10 @@ const getSuperheroById = createAsyncThunk(
   }
 );
 
-
-type UpdateSuperheroData = {superheroId: string, updatedSuperhero: IAddSuperhero}
+type UpdateSuperheroData = {
+  superheroId: string;
+  updatedSuperhero: IAddSuperhero;
+};
 
 const updateSuperhero = createAsyncThunk(
   "superheroes/changeSuperhero",
@@ -92,7 +94,7 @@ interface IAddImageData {
 
 const addSuperheroImage = createAsyncThunk(
   "superheroes/addSuperheroImage",
-  async (data:IAddImageData) => {
+  async (data: IAddImageData) => {
     try {
       await axios.patch(
         `${BASE_URL}/${API_SUPERHEROES}/${data.superheroId}`,
@@ -106,8 +108,8 @@ const addSuperheroImage = createAsyncThunk(
   }
 );
 
-
-interface IDeleteImageData { // template
+interface IDeleteImageData {
+  // template
   superhero: {
     _id: string;
     avatar: string;
@@ -117,14 +119,12 @@ interface IDeleteImageData { // template
     superpowers: string;
     catch_phrase: string;
   };
-  image: {
-    id: string;
-  };
+  image: IImage;
 }
 
 const deleteSuperheroImage = createAsyncThunk(
   "superheroes/deleteSuperheroImage",
-  async (data:IDeleteImageData) => {
+  async (data: IDeleteImageData) => {
     const superheroId = data.superhero._id;
     const imageId = data.image.id;
     try {

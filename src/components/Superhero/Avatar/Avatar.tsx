@@ -1,6 +1,3 @@
-// libs
-import PropTypes from "prop-types";
-
 // config
 import { BASE_URL, IMAGES } from "../../../config";
 
@@ -10,7 +7,14 @@ import defaultAvatar from "../../../images/default_superhero.jpg";
 // styled components
 import { AvatarContainer, AvatarImage } from "./Avatar.styled";
 
-const Avatar = ({ superhero }) => {
+// interfaces
+import ISuperheroDB from "../../../interfaces/superherodb.interface";
+
+interface IProps {
+  superhero: ISuperheroDB;
+}
+
+const Avatar = ({ superhero }: IProps) => {
   const { images, nickname } = superhero;
   const DEFAULT_IMAGE = images.length === 0;
   const AVATAR_USER = images.length !== 0;
@@ -28,16 +32,6 @@ const Avatar = ({ superhero }) => {
       )}
     </AvatarContainer>
   );
-};
-
-Avatar.propTypes = {
-  superhero: PropTypes.shape({
-    nickname: PropTypes.string.isRequired,
-    real_name: PropTypes.string.isRequired,
-    origin_description: PropTypes.string.isRequired,
-    superpowers: PropTypes.string.isRequired,
-    catch_phrase: PropTypes.string.isRequired,
-  }),
 };
 
 export default Avatar;

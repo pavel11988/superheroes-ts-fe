@@ -8,10 +8,10 @@ import {
   setImage,
   toggleModalImageOpen,
 } from "../../../redux/global/globalSlice";
+import { AppDispatch } from "../../../redux/store";
 
 // components
-import { ReactComponent as DeleteIcon } from "../../../images/delete.svg";
-import { ReactComponent as ZoomIcon } from "../../../images/zoom-in.svg";
+import Icon from "../../Icon/Icon";
 
 // styled components
 import {
@@ -23,22 +23,38 @@ import {
   ImageButton,
 } from "./Gallery.styled";
 
-const Gallery = ({ superhero }) => {
-  const dispacth = useDispatch();
-  const currentPage = useSelector((state) => state.superheroes.page);
-  const currentLimit = useSelector((state) => state.superheroes.limit);
+// interfaces
+import ISuperheroDB from "../../../interfaces/superherodb.interface";
+import IState from "../../../interfaces/state.interface";
+import IImage from "../../../interfaces/image.interface";
+
+interface IProps {
+  superhero: ISuperheroDB;
+}
+interface IData {
+  superhero: ISuperheroDB;
+  image: IImage;
+}
+
+const Gallery = ({ superhero }: IProps) => {
+  const dispacth = useDispatch<AppDispatch>();
+  const currentPage = useSelector((state: IState) => state.superheroes.page);
+  const currentLimit = useSelector((state: IState) => state.superheroes.limit);
 
   const { images } = superhero;
 
-  const openImage = async (image) => {
+  const openImage = async (image: IImage) => {
     await dispacth(setImage(image));
     await dispacth(toggleModalImageOpen(true));
   };
 
-  const deleteImage = async (data) => {
+  const deleteImage = async (data: IData) => {
     await dispacth(superheroesOperations.deleteSuperheroImage(data));
     await dispacth(
-      superheroesOperations.listSuperheroes(currentPage, currentLimit)
+      superheroesOperations.listSuperheroes({
+        page: currentPage,
+        limit: currentLimit,
+      })
     );
   };
 
@@ -57,7 +73,7 @@ const Gallery = ({ superhero }) => {
             <GalleryItem key={image.id}>
               <GalleryImage
                 src={`${BASE_URL}/${IMAGES}/${image.id}.${image.extension}`}
-                alt={`${superhero.id}_${image.id}`}
+                alt={`${superhero._id}_${image.id}`}
               />
               <ImageButtonsContainer>
                 <ImageButton
@@ -67,7 +83,12 @@ const Gallery = ({ superhero }) => {
                     openImage(image);
                   }}
                 >
-                  {<ZoomIcon fill={"#ecffac"} width={"23"} height={"23"} />}
+                  <Icon
+                    id={"#icon-zoom"}
+                    width={23}
+                    height={23}
+                    color={"#ecffac"}
+                  />
                 </ImageButton>
 
                 <ImageButton
@@ -77,7 +98,12 @@ const Gallery = ({ superhero }) => {
                     deleteImage({ superhero, image });
                   }}
                 >
-                  {<DeleteIcon fill={"#ff5959"} width={"23"} height={"23"} />}
+                  <Icon
+                    id={"#icon-delete"}
+                    width={23}
+                    height={23}
+                    color={"#ff5959"}
+                  />
                 </ImageButton>
               </ImageButtonsContainer>
             </GalleryItem>

@@ -27,8 +27,8 @@ type ClickFunc = (event: React.MouseEvent<HTMLInputElement>) => void;
 
 const Pagination = ({ totalPages }: IProps) => {
   const dispatch = useDispatch<AppDispatch>();
-  const limit = useSelector((state:IState) => state.superheroes.limit);
-  const currentPage = useSelector((state:IState) => state.superheroes.page);
+  const limit = useSelector((state: IState) => state.superheroes.limit);
+  const currentPage = useSelector((state: IState) => state.superheroes.page);
 
   const pageNumbers = [];
 
@@ -36,10 +36,12 @@ const Pagination = ({ totalPages }: IProps) => {
     pageNumbers.push(i);
   }
 
-  const handleClick:ClickFunc = async (event: React.MouseEvent<HTMLInputElement>) => {
+  const handleClick: ClickFunc = async (
+    event: React.MouseEvent<HTMLInputElement>
+  ) => {
     event.preventDefault();
-    const page =  Number(event.currentTarget.name);
-    await dispatch(superheroesOperations.listSuperheroes({page, limit}));
+    const page = Number(event.currentTarget.name);
+    await dispatch(superheroesOperations.listSuperheroes({ page, limit }));
   };
 
   return (
@@ -57,7 +59,11 @@ const Pagination = ({ totalPages }: IProps) => {
               </CurrentPageButton>
             )}
             {currentPage !== pageNumber && (
-              <PageButton type="button" name={`${pageNumber}`} onClick={() => handleClick}>
+              <PageButton
+                type="button"
+                name={`${pageNumber}`}
+                onClick={() => handleClick}
+              >
                 {pageNumber}
               </PageButton>
             )}
@@ -67,6 +73,5 @@ const Pagination = ({ totalPages }: IProps) => {
     </PaginationContainer>
   );
 };
-
 
 export default Pagination;
