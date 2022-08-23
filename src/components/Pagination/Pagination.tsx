@@ -31,7 +31,6 @@ const Pagination = ({ totalPages }: IProps) => {
 
   const handleClick = async (event: React.MouseEvent<HTMLButtonElement>) => {
     event.preventDefault();
-    console.log(event);
     const page = Number(event.currentTarget.name);
     await dispatch(superheroesOperations.listSuperheroes({ page, limit }));
   };
