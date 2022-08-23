@@ -18,13 +18,6 @@ interface IProps {
   totalPages: number;
 }
 
-// interface ListRequest {
-//   numberPage?: number;
-//   limit?: number;
-// }
-
-type ClickFunc = (event: React.MouseEvent<HTMLInputElement>) => void;
-
 const Pagination = ({ totalPages }: IProps) => {
   const dispatch = useDispatch<AppDispatch>();
   const limit = useSelector((state: IState) => state.superheroes.limit);
@@ -36,10 +29,9 @@ const Pagination = ({ totalPages }: IProps) => {
     pageNumbers.push(i);
   }
 
-  const handleClick: ClickFunc = async (
-    event: React.MouseEvent<HTMLInputElement>
-  ) => {
+  const handleClick = async (event: React.MouseEvent<HTMLButtonElement>) => {
     event.preventDefault();
+    console.log(event);
     const page = Number(event.currentTarget.name);
     await dispatch(superheroesOperations.listSuperheroes({ page, limit }));
   };
@@ -53,7 +45,7 @@ const Pagination = ({ totalPages }: IProps) => {
               <CurrentPageButton
                 type="button"
                 name={`${pageNumber}`}
-                onClick={() => handleClick}
+                onClick={handleClick}
               >
                 {pageNumber}
               </CurrentPageButton>
@@ -62,7 +54,7 @@ const Pagination = ({ totalPages }: IProps) => {
               <PageButton
                 type="button"
                 name={`${pageNumber}`}
-                onClick={() => handleClick}
+                onClick={handleClick}
               >
                 {pageNumber}
               </PageButton>
