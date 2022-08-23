@@ -84,7 +84,7 @@ const Gallery = ({ superhero }: IProps) => {
                   }}
                 >
                   <Icon
-                    id={"#icon-zoom"}
+                    id={"#icon-zoom-in"}
                     width={23}
                     height={23}
                     color={"#ecffac"}

@@ -1,14 +1,14 @@
 // libs
 import { useState } from "react";
 import toast from "react-hot-toast";
-import PropTypes from "prop-types";
 
 // redux
 import { useDispatch, useSelector } from "react-redux";
 import superheroesOperations from "../../../redux/superheroes/superheroOperations";
+import { AppDispatch } from "../../../redux/store";
 
 // components
-import { ReactComponent as UploadIcon } from "../../../images/upload.svg";
+import Icon from "../../Icon/Icon";
 
 // styled components
 import {
@@ -21,20 +21,37 @@ import {
   UploadInput,
 } from "./Uploader.styled";
 
-const Uploader = ({ superhero }) => {
-  const [image, setImage] = useState(null);
-  const currentPage = useSelector((state) => state.superheroes.page);
-  const currentLimit = useSelector((state) => state.superheroes.limit);
+// interfaces
+import IState from "../../../interfaces/state.interface";
+import ISuperheroDB from "../../../interfaces/superherodb.interface";
+
+interface IProps {
+  superhero: ISuperheroDB;
+}
+
+type IImage = null | Blob;
+
+type ClickFunc = (event: React.MouseEvent<HTMLButtonElement>) => void;
+// type InputFunc = (event: React.MouseEvent<HTMLInputElement>) => void;
+
+const Uploader = ({ superhero }: IProps) => {
+  const dispatch = useDispatch<AppDispatch>();
+
+  const currentPage = useSelector((state: IState) => state.superheroes.page);
+  const currentLimit = useSelector((state: IState) => state.superheroes.limit);
+
+  const [image, setImage] = useState<IImage>(null);
   const [arrayIsFull, setArrayIsFull] = useState(false);
   const [uploadError, setUploadError] = useState(false);
 
-  const dispatch = useDispatch();
+  const notifyError = (message: string) => toast.error(message);
 
-  const notifyError = (message) => toast.error(message);
-
-  const handleImage = async (event) => {
+  const handleImage = async (event: React.ChangeEvent<HTMLInputElement>) => {
     event.preventDefault();
-    const newImage = event.target.files[0];
+
+    const target = event.target as HTMLInputElement;
+    const newImage = target?.files?.[0];
+
     setUploadError(false);
 
     if (!newImage) {
@@ -44,8 +61,8 @@ const Uploader = ({ superhero }) => {
     const fileReader = new FileReader();
     fileReader.readAsDataURL(newImage);
     fileReader.onload = (event) => {
-      let image = new Image();
-      image.src = event.target.result;
+      let image: any = new Image();
+      image.src = event.target?.result;
       image.onload = function () {
         const isError =
           image.width < 70 || image.height < 70 || newImage.size > 5120000;
@@ -59,10 +76,12 @@ const Uploader = ({ superhero }) => {
     };
   };
 
-  const onUploadImage = async (event) => {
+  const onUploadImage: ClickFunc = async (
+    event: React.MouseEvent<HTMLButtonElement>
+  ) => {
     event.preventDefault();
     const formdata = new FormData();
-    await formdata.append("image", image);
+    await formdata.append("image", image as Blob);
     const data = {
       superheroId: superhero._id,
       formData: formdata,
@@ -75,9 +94,11 @@ const Uploader = ({ superhero }) => {
     }
 
     await dispatch(superheroesOperations.addSuperheroImage(data));
-
     await dispatch(
-      superheroesOperations.listSuperheroes(currentPage, currentLimit)
+      superheroesOperations.listSuperheroes({
+        page: currentPage,
+        limit: currentLimit,
+      })
     );
     setImage(null);
   };
@@ -93,7 +114,7 @@ const Uploader = ({ superhero }) => {
         onClick={onUploadImage}
         disabled={DISABLED_BUTTON_UPLOAD}
       >
-        {<UploadIcon fill={"#ede9e9"} />}
+        <Icon id={"#icon-upload"} width={20} height={20} color={"#f9f9f9"} />
       </ButtonUpload>
       <InputContainer>
         <Label>Select a image</Label>
@@ -114,16 +135,6 @@ const Uploader = ({ superhero }) => {
       )}
     </UploadContainer>
   );
-};
-
-Uploader.propTypes = {
-  superhero: PropTypes.shape({
-    nickname: PropTypes.string.isRequired,
-    real_name: PropTypes.string.isRequired,
-    origin_description: PropTypes.string.isRequired,
-    superpowers: PropTypes.string.isRequired,
-    catch_phrase: PropTypes.string.isRequired,
-  }),
 };
 
 export default Uploader;
